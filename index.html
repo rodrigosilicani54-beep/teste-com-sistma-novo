@@ -1074,8 +1074,10 @@
         const MAX_LOGIN_ATTEMPTS = 3;
 
         function initializeDefaultAdmin() {
+            console.log('Inicializando admin padrão');
             // Create default admin user if no users exist
             if (users.length === 0) {
+                console.log('Nenhum usuário encontrado, criando admin padrão');
                 const defaultAdmin = {
                     id: 'admin_default',
                     name: 'Administrador',
@@ -1086,20 +1088,36 @@
                 };
                 users.push(defaultAdmin);
                 localStorage.setItem('users', JSON.stringify(users));
+                console.log('Admin padrão criado:', defaultAdmin);
+            } else {
+                console.log('Usuários já existem, não é necessário criar admin padrão');
             }
         }
 
         function checkLoginStatus() {
+            console.log('Verificando status de login');
             const savedUser = localStorage.getItem('currentUser');
+            console.log('Usuário salvo:', savedUser);
+            
             if (savedUser) {
                 currentUser = JSON.parse(savedUser);
+                console.log('Usuário atual:', currentUser);
+                console.log('Lista de usuários disponíveis:', users);
+                
                 const user = users.find(u => u.id === currentUser.id);
+                console.log('Usuário encontrado:', user);
+                
                 if (user) {
                     setUserPermissions(user);
                     showMainInterface();
                     return true;
+                } else {
+                    console.log('Usuário não encontrado na lista de usuários');
                 }
+            } else {
+                console.log('Nenhum usuário salvo no localStorage');
             }
+            
             showLoginModal();
             return false;
         }
@@ -1155,6 +1173,9 @@
         }
 
         function login(username, password) {
+            console.log('Tentando login com:', username);
+            console.log('Usuários disponíveis:', users);
+            
             const user = users.find(u => u.username === username && u.password === password);
             
             if (user) {
@@ -2405,7 +2426,18 @@
 
         // Initialize the application
         function init() {
+            // Garantir que os dados sejam carregados do localStorage
+            professionals = JSON.parse(localStorage.getItem('professionals')) || [];
+            appointments = JSON.parse(localStorage.getItem('appointments')) || [];
+            users = JSON.parse(localStorage.getItem('users')) || [];
+            rooms = JSON.parse(localStorage.getItem('rooms')) || [];
+            roomSchedule = JSON.parse(localStorage.getItem('roomSchedule')) || [];
+            
+            console.log('Inicializando aplicação, usuários:', users);
+            
             initializeDefaultAdmin();
+            console.log('Após inicializar admin, usuários:', users);
+            
             if (!checkLoginStatus()) {
                 return; // User needs to login first
             }
@@ -4925,5 +4957,5 @@
             </div>
         </div>
     </div>
-<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'97717b6f267e248c',t:'MTc1NjUyNzQ4NS4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+<!-- Script removido para evitar interferência com a inicialização --></body>
 </html>
